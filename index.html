@@ -149,7 +149,7 @@ var app = new Vue({
       return p;
     },
     percentage_num: function(){
-      return this.percentage.toString.replace(/0.0*[^0]([^0]*)/,'$&');
+      return this.percentage.toString().replace(/0.0*[^0]([^0]*)/,"$&");
     },
     submitable: function() {
       return !!(this.name && this.contribution)
