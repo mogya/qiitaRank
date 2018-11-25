@@ -1,0 +1,182 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=320, user-scalable=no" name="viewport">
+<title>Qiitaエンジニアランキング(非公式)</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<style>
+.title{
+  font-size:1.5rem;
+}
+.title{
+  font-size:1.5rem;
+}
+.container{
+  margin-bottom: 10px;
+}
+#area_result .message-body {
+  background: #fff;
+  border: 1px solid #222;
+  border-top: none;
+}
+</style>
+</head>
+<body>
+<section id="app" class="section">
+  <div v-show="loading" class="loading modal" :class="{ 'is-active':loading }">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <i class="fas fa-spinner fa-spin"></i>
+    </div>
+  </div>
+  <div id="area_input" class="container">
+    <h1 class="title">エンジニアランキング</h1>
+    <p class="subtitle">Qiitaのcontributions値から,日本でどのくらいのエンジニアなのかを見積もります</p>
+  </div>
+  <div v-show="true || !showResult" id="area_input" class="container">
+    <p class="subtitle"><i class="fas fa-edit"></i><a href="https://qiita.com/">ユーザーページ</a>を参考に、あなたのcontributions値を入力してね！</p>
+    <img src="img/qiita_screen.png" style="width:278px;height:278px;">
+    <div class="field">
+      <label class="label" for="input_name">おなまえ</label>
+      <div class="control">
+        <input class="input" type="text" id="input_name" placefolder="ななし" v-model="name" >
+      </div>
+    </div>
+    <div class="field">
+      <label class="label" for="input_contribution">contribution値</label>
+      <div class="control">
+        <input class="input" type="number" id="input_contribution" placefolder="200" v-model="contribution" >
+      </div>
+    </div>
+    <div class="field is-grouped">
+      <div class="control">
+        <button :disabled="!submitable" @click="onSubmit" class="button is-fullwidth is-primary ">判定</button>
+        <span class="is-small">(入力されたデータはどこにも送信されずにこのファイル上で判定が行われます)</span>
+      </div>
+    </div>
+  </div>
+  <div v-show="true || showResult" id="area_result" class="message is-primary">
+    <div class="message-header">
+      <p>判定</p>
+      <button @click="onClickResultClose" class="delete" aria-label="delete"></button>
+    </div>
+    <div v-if="contribution > maxContribution" class="message-body">
+      <p>{{name}}さんは、Qiitaユーザー20万人のうち、{{rank}}位くらいに位置します。</p>
+      <p>はいはいワロスワロス。</p>
+    </div>
+    <div v-else-if="contribution >= godContribution" class="message-body">
+      <p>{{name}}さんは、Qiitaユーザー20万人のうち、{{rank}}位くらいに位置します。</p>
+      <p>あなたが伊藤神か！</p>
+    </div>
+    <div v-else-if="percentage < 0.01" class="message-body">
+      <p>{{name}}さんは、Qiitaユーザー20万人のうち、{{rank}}位くらいに位置します。</p>
+      <p>これは、上位から{{percentage_num}}%に当たります。日本を代表するエンジニアですね！</p>
+    </div>
+    <div v-else-if="percentage < 1" class="message-body">
+      <p>{{name}}さんは、Qiitaユーザー20万人のうち、{{rank}}位くらいに位置します。</p>
+      <p>これは、上位から{{percentage_num}}%に当たります。一流エンジニアですね！</p>
+    </div>
+    <div v-else-if="percentage < 15" class="message-body">
+      <p>{{name}}さんは、Qiitaユーザー20万人のうち、{{rank}}位くらいに位置します。</p>
+      <p>これは、上位から{{percentage_num}}%に当たります。立派なエンジニアですね！</p>
+    </div>
+    <div v-else class="message-body">
+      <p>{{name}}さんは、Qiitaユーザー20万人のうち、{{rank}}位くらいに位置します。</p>
+      <p>一つ記事を書けばあなたも立派なエンジニアになれるよ！</p>
+    </div>
+  </div>
+  <div id="area_list" class="container">
+    参考
+    <ul>
+      <li><a href='https://help.qiita.com/ja/articles/qiita-contribution' target='_blank'>Contributionとは - Qiita:Support</a></li>
+      <li><a href='https://qiita.com//t_nakayama0714/items/07ce8bf3501268f96fe3#contribution%E3%81%AE%E5%88%86%E5%B8%83' target='_blank'>Qiitaのあれこれをひたすら分析してランキング - Qiita</a></li>
+      <li>creater: <a href='https://twitter.com/mogya' target='_blank'>mogya</a></li>
+    </ul>
+  </div>
+
+</section>
+</body>
+<script type="text/javascript">
+const user_count = 200000;
+const point_classes = [
+     {contribution : 0, percentage : 100},
+     {contribution : 1, percentage : 14.47},
+     {contribution : 10, percentage : 9.15},
+     {contribution : 100, percentage : 3.18},
+     {contribution : 1000, percentage : 0.44},
+     {contribution : 10000, percentage : 0.01},
+     {contribution : 41159, percentage : 1/user_count},
+     {contribution : 50000, percentage : 0},
+     {contribution : Infinity, percentage : 0},
+];
+var app = new Vue({
+  el: "#app",
+  data: {
+    loading: false,
+    showResult: false,
+    name: "mogya",
+    contribution: 123,
+  },
+  computed: {
+    maxContribution: function () {
+      return point_classes[point_classes.length-2].contribution;
+    },
+    godContribution: function () {
+      return point_classes[point_classes.length-3].contribution;
+    },
+    rank: function () {
+      let r = 1;
+      if (this.percentage !== 0){
+        r = Math.ceil(user_count*this.percentage/100);
+      }
+      console.log(`rank(u):${user_count}`);
+      console.log(`rank(p):${this.percentage}`);
+      console.log(`rank:${r}`);
+      return r;
+    },
+    percentage: function () {
+      const c = this.user_classes;
+      let p =
+        (c[0].contribution-this.contribution) *
+        (c[1].percentage-c[0].percentage) /
+          (c[0].contribution-c[1].contribution) +
+          c[0].percentage;
+      console.log(`percentage:${p}`);
+      if (c[1].percentage === 0){ p = 0; }
+      return p;
+    },
+    percentage_num: function(){
+      return this.percentage.toString.replace(/0.0*[^0]([^0]*)/,'$&');
+    },
+    submitable: function() {
+      return !!(this.name && this.contribution)
+    },
+    user_classes: function() {
+      const index = point_classes.findIndex((element)=>{
+        return (this.contribution < element.contribution);
+      });
+      const r = [point_classes[index], point_classes[index-1]];
+      console.log("user_classes:");
+      console.log(r);
+      return r;
+    }
+  },
+  methods: {
+    onSubmit: function () {
+      this.loading = true;
+      setTimeout(()=>{
+        this.showResult = true;
+        this.loading = false;
+      }, 1000)
+    },
+    onClickResultClose: function(){
+      this.showResult = false;
+    }
+  }
+})
+</script>
+</html>
+
