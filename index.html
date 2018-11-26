@@ -180,7 +180,7 @@ var app = new Vue({
       return ret;
     },
     submitable: function() {
-      return !!(this.name && this.contribution)
+      return !!(this.name && this.contribution >= 0 )
     },
     user_classes: function() {
       const index = point_classes.findIndex((element)=>{
