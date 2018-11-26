@@ -8,6 +8,9 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <style>
+body{
+  width:320px;
+}
 .title{
   font-size:1.5rem;
 }
@@ -71,32 +74,33 @@
       <div id="area_result_text" >
         <div v-if="contribution > maxContribution">
           <img src="img/illust_torokko_trolley_rail_businessman_out.png" style="width:200px;height:188px" />
-          <p>{{name}}さんは、Qiitaユーザー20万人のうち、{{rank}}位くらいに位置します。</p>
-          <p>はいはいワロスワロス</p>
+          <p>{{name}}さんのcontribution {{contribution}}は、Qiitaユーザー20万人のうち、{{rank}}位くらいに位置します。</p>
+          <p>どんな入力欄にも境界値テストを欠かさないその姿勢が素晴らしいスコアを支えているのですね！</p>
+          <p>ちなみに解答は、このパターンを含めて6ケース用意していますよ</p>
         </div>
         <div v-else-if="contribution >= godContribution">
           <img src="img/illust_network_dennou_sekai_man.png" style="width:200px;height:195px" />
-          <p>{{name}}さんは、Qiitaユーザー20万人のうち、{{rank}}位くらいに位置します。</p>
+          <p>{{name}}さんのcontribution {{contribution}}は、Qiitaユーザー20万人のうち、{{rank}}位くらいに位置します。</p>
           <p>あなたが伊藤神か！</p>
         </div>
         <div v-else-if="percentage < 0.01">
           <img src="img/illust_computer_hacker.png" style="width:200px;height:199px" />
-          <p>{{name}}さんは、Qiitaユーザー20万人のうち、{{rank}}位くらいに位置します。</p>
+          <p>{{name}}さんのcontribution {{contribution}}は、Qiitaユーザー20万人のうち、{{rank}}位くらいに位置します。</p>
           <p>これは、上位から{{percentage_num}}%に当たります。日本を代表するエンジニアですね！</p>
         </div>
         <div v-else-if="percentage < 1">
           <img src="img/illust_computer_hacker_white1.png" style="width:200px;height:200px" />
-          <p>{{name}}さんは、Qiitaユーザー20万人のうち、{{rank}}位くらいに位置します。</p>
+          <p>{{name}}さんのcontribution {{contribution}}は、Qiitaユーザー20万人のうち、{{rank}}位くらいに位置します。</p>
           <p>これは、上位から{{percentage_num}}%に当たります。一流エンジニアですね！</p>
         </div>
         <div v-else-if="percentage < 15">
           <img src="img/illust_computer_hacker_white1.png" style="width:200px;height:200px" />
-          <p>{{name}}さんは、Qiitaユーザー20万人のうち、{{rank}}位くらいに位置します。</p>
+          <p>{{name}}さんのcontribution {{contribution}}は、Qiitaユーザー20万人のうち、{{rank}}位くらいに位置します。</p>
           <p>これは、上位から{{percentage_num}}%に当たります。立派なエンジニアですね！</p>
         </div>
         <div v-else>
           <img src="img/illust_smartphone_neru_schoolboy.png" style="width:200px;height:142px" />
-          <p>{{name}}さんは、Qiitaユーザー20万人のうち、{{rank}}位くらいに位置します。</p>
+          <p>{{name}}さんのcontribution {{contribution}}は、Qiitaユーザー20万人のうち、{{rank}}位くらいに位置します。</p>
           <p>一つ記事を書けばあなたも立派なエンジニアになれるよ！</p>
         </div>
       </div>
