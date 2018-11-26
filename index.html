@@ -185,9 +185,9 @@ var app = new Vue({
     percentage_num: function(){
       let ret = '';
       if (this.percentage > 1){
-        ret = this.percentage.toString().replace(/([^0].[^0])(.*)/,"$1");
+        ret = this.percentage.toString().replace(/([^0]\.[^0])(.*)/,"$1");
       }else{
-        ret = this.percentage.toString().replace(/(0.0*[^0])(.*)/,"$1");
+        ret = this.percentage.toString().replace(/(0\.0*[^0])(.*)/,"$1");
       }
       return ret;
     },
