@@ -36,7 +36,7 @@
     <h1 class="title">エンジニアランキング</h1>
     <p class="subtitle">Qiitaのcontributions値から,日本でどのくらいのエンジニアなのかを見積もります</p>
   </div>
-  <div v-show="true || !showResult" id="area_input" class="container">
+  <div v-show="!showResult" id="area_input" class="container">
     <p class="subtitle"><i class="fas fa-edit"></i><a href="https://qiita.com/">ユーザーページ</a>を参考に、あなたのcontributions値を入力してね！</p>
     <img src="img/qiita_screen.png" style="width:278px;height:278px;">
     <div class="field">
@@ -57,7 +57,7 @@
       </div>
     </div>
   </div>
-  <div v-show="true || showResult" id="area_result" class="message is-primary">
+  <div v-show="debug || showResult" id="area_result" class="message is-primary">
     <div class="message-header">
       <p>判定</p>
       <button @click="onClickResultClose" class="delete" aria-label="delete"></button>
@@ -131,9 +131,9 @@ var app = new Vue({
       if (this.percentage !== 0){
         r = Math.ceil(user_count*this.percentage/100);
       }
-      console.log(`rank(u):${user_count}`);
-      console.log(`rank(p):${this.percentage}`);
-      console.log(`rank:${r}`);
+      this.debug_log(`rank(u):${user_count}`);
+      this.debug_log(`rank(p):${this.percentage}`);
+      this.debug_log(`rank:${r}`);
       return r;
     },
     percentage: function () {
@@ -143,7 +143,7 @@ var app = new Vue({
         (c[1].percentage-c[0].percentage) /
           (c[0].contribution-c[1].contribution) +
           c[0].percentage;
-      console.log(`percentage:${p}`);
+      this.debug_log(`percentage:${p}`);
       if (c[1].percentage === 0){ p = 0; }
       return p;
     },
@@ -158,9 +158,12 @@ var app = new Vue({
         return (this.contribution < element.contribution);
       });
       const r = [point_classes[index], point_classes[index-1]];
-      console.log("user_classes:");
-      console.log(r);
+      this.debug_log("user_classes:");
+      this.debug_log(r);
       return r;
+    },
+    debug: function(){
+      return false;
     }
   },
   methods: {
@@ -173,6 +176,8 @@ var app = new Vue({
     },
     onClickResultClose: function(){
       this.showResult = false;
+    debug_log: function(msg){
+      // console.log(msg);
     }
   }
 })
