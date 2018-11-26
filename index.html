@@ -26,6 +26,7 @@
   text-align: center;
   font-size: 10rem;
 }
+
 </style>
 </head>
 <body>
@@ -99,6 +100,10 @@
           <p>一つ記事を書けばあなたも立派なエンジニアになれるよ！</p>
         </div>
       </div>
+      <div class="twitter">
+        <p><a :href=`https://twitter.com/intent/tweet?text=${tweet_text}&url=https://mogya.github.io/qiitaRank/` target='_blank'><i class="fab fa-twitter-square"></i>この結果をツイートする</a></p>
+       </a>
+      </div>
     </div>
   </div>
   <div id="area_list" class="container">
@@ -129,8 +134,9 @@ var app = new Vue({
   data: {
     loading: false,
     showResult: false,
-    name: "mogya",
-    contribution: 123,
+    name: "",
+    contribution: 0,
+    tweet_text: '',
   },
   computed: {
     maxContribution: function () {
@@ -191,10 +197,15 @@ var app = new Vue({
       setTimeout(()=>{
         this.showResult = true;
         this.loading = false;
+        this.updateTweetText();
       }, 1000)
     },
     onClickResultClose: function(){
       this.showResult = false;
+    },
+    updateTweetText: function(){
+      this.tweet_text = encodeURI(document.getElementById('area_result_text').textContent);
+    },
     debug_log: function(msg){
       // console.log(msg);
     }
