@@ -82,7 +82,7 @@ body{
       <button @click="onClickResultClose" class="delete" aria-label="delete"></button>
     </div>
     <div class="message-body">
-      <div id="area_result_text" >
+      <div ref="area_result_text" >
         <div v-if="contribution > maxContribution">
           <img src="img/illust_torokko_trolley_rail_businessman_out.png" style="width:200px;height:188px" />
           <p>{{name}}さんのcontribution {{contribution}}は、Qiitaユーザー20万人のうち、{{rank}}位くらいに位置します。</p>
@@ -220,7 +220,7 @@ var app = new Vue({
       this.showResult = false;
     },
     updateTweetText: function(){
-      this.tweet_text = encodeURI(document.getElementById('area_result_text').textContent);
+      this.tweet_text = encodeURI(this.$refs.area_result_text.textContent);
     },
     debug_log: function(msg){
       // console.log(msg);
